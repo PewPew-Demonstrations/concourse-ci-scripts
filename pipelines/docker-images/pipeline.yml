@@ -1,0 +1,47 @@
+---
+jobs:
+  - name: build-suncorp-demo-ci
+    plan:
+      - get: scripts
+        trigger: false
+      - get: suncorp-demo-ci-source
+        trigger: true
+      - get: suncorp-demo-ci-version
+        params: {bump: minor}
+      - put: suncorp-demo-ci
+        params:
+          build: suncorp-demo-ci-source/Dockerfiles/suncorp-demo-ci
+          tag: suncorp-demo-ci-version/number
+          tag_as_latest: true
+      - put: suncorp-demo-ci-version
+        params: {bump: minor}
+
+resources:
+  - name: scripts
+    type: git
+    source:
+      uri: {{scripts_git_uri}}
+      branch: {{scripts_git_branch}}
+      private_key: {{scripts_git_private_key}}
+  - name: suncorp-demo-ci-source
+    type: git
+    source:
+      uri: {{scripts_git_uri}}
+      branch: {{scripts_git_branch}}
+      private_key: {{scripts_git_private_key}}
+      paths:
+        - Dockerfiles/suncorp-demo-ci/*
+  - name: suncorp-demo-ci
+    type: docker-image
+    source:
+      repository: 406465642840.dkr.ecr.ap-southeast-2.amazonaws.com/suncorp-demo-ci
+  - name: suncorp-demo-ci-version
+    type: semver
+    source:
+      initial_version: 1.0.0
+      driver: git
+      uri: {{scripts_git_uri}}
+      branch: {{scripts_git_version_branch}}
+      private_key: {{scripts_git_private_key}}
+      file: suncorp-demo-ci
+
