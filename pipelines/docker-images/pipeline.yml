@@ -41,7 +41,7 @@ resources:
       initial_version: 1.0.0
       driver: git
       uri: {{versions_git_uri}}
-      branch: {{versions_git_version_branch}}
+      branch: {{versions_git_branch}}
       private_key: {{versions_git_private_key}}
       file: tw-cd-concourse-ci
 
