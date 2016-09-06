@@ -6,7 +6,7 @@ jobs:
   - name: test
     build_logs_to_retain: 10
     plan:
-      do:
+      - do:
         - get: source
           trigger: true
         - get: scripts
