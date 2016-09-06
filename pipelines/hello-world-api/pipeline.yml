@@ -1,6 +1,16 @@
 MAVEN_SCRIPT: &MAVEN_SCRIPT
   task: maven-script
   file: scripts/maven-projects/script.yml
+VALIDATE: &VALIDATE
+  <<: *MAVEN_SCRIPT
+  task: maven-validate
+  params:
+    CMD: validate
+UNIT_TEST: &UNIT_TEST
+  <<: *MAVEN_SCRIPT
+  task: maven-test
+  params:
+    CMD: test
 
 jobs:
   - name: test
@@ -11,10 +21,10 @@ jobs:
           trigger: true
         - get: scripts
           trigger: false
-        - <<: *MAVEN_SCRIPT
+        - <<: *VALIDATE
           input_mapping: {code: source}
-          params:
-            CMD: test
+        - <<: *UNIT_TEST
+          input_mapping: {code: source}
 
 resources:
   - name: scripts
