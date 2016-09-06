@@ -1,0 +1,41 @@
+MAVEN_SCRIPT: &MAVEN_SCRIPT
+  task: maven-script
+  file: scripts/maven-projects/script.yml
+
+jobs:
+  - name: test
+    build_logs_to_retain: 10
+    plan:
+      do:
+        - get: source
+          trigger: true
+        - get: scripts
+          trigger: false
+        - <<: *MAVEN_SCRIPT
+          input_mapping: {code: source}
+          params:
+            CMD: test
+
+resources:
+  - name: scripts
+    type: git
+    source:
+      uri: {{scripts_git_uri}}
+      branch: {{scripts_git_branch}}
+      private_key: {{scripts_git_private_key}}
+  - name: source
+    type: git
+    source:
+      uri: {{hello_world_api_git_uri}}
+      branch: {{hello_world_api_git_branch}}
+      private_key: {{hello_world_api_git_private_key}}
+  - name: version
+    type: semver
+    source:
+      initial_version: 1.0.0
+      driver: git
+      uri: {{versions_git_uri}}
+      branch: {{versions_git_branch}}
+      private_key: {{versions_git_private_key}}
+      file: hello-world-api
+    
