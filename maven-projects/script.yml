@@ -12,8 +12,7 @@ inputs:
   - name: scripts
 
 run:
-  path: ../scripts/maven-projects/script.sh
-  dir: code
+  path: scripts/maven-projects/script.sh
 
 params:
   CMD: test

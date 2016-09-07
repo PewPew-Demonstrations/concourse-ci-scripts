@@ -13,6 +13,5 @@ inputs:
   - name: version
 
 run:
-  path: ../scripts/maven-projects/publish.sh
-  dir: code
+  path: scripts/maven-projects/publish.sh
 

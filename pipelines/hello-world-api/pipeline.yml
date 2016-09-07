@@ -42,6 +42,7 @@ jobs:
         - <<: *PUBLISH
           input_mapping: {code: source}
         - put: version
+          params: {file: version/number}
 
 resources:
   - name: scripts
