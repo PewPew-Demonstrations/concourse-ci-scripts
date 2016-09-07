@@ -39,7 +39,7 @@ jobs:
           trigger: false
         - get: version
           params: {bump: minor}
-        - <<: *PACKAGE
+        - <<: *PUBLISH
           input_mapping: {code: source}
         - put: version
 
