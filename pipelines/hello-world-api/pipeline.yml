@@ -11,6 +11,9 @@ UNIT_TEST: &UNIT_TEST
   task: maven-test
   params:
     CMD: test
+PACKAGE: &PACKAGE
+  <<: *MAVEN_SCRIPT
+  task: maven-deploy
 
 jobs:
   - name: test
@@ -25,6 +28,24 @@ jobs:
           input_mapping: {code: source}
         - <<: *UNIT_TEST
           input_mapping: {code: source}
+  - name: package
+    build_logs_to_retain: 10
+    plan:
+      - do:
+        - get: source
+          trigger: true
+          passed: [test]
+        - get: scripts
+          trigger: false
+        - get: version
+          params: {bump: minor}
+        - <<: *PACKAGE
+          input_mapping: {code: source}
+          params:
+            CMD: deploy
+            VERSION: version/number
+        - put: version
+          params: {bump: minor}
 
 resources:
   - name: scripts
@@ -48,4 +69,4 @@ resources:
       branch: {{versions_git_branch}}
       private_key: {{versions_git_private_key}}
       file: hello-world-api
-    
+
