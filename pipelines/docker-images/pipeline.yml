@@ -14,7 +14,6 @@ jobs:
           tag: tw-cd-concourse-ci-version/number
           tag_as_latest: true
       - put: tw-cd-concourse-ci-version
-        params: {bump: minor}
 
 resources:
   - name: scripts
